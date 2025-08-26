@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkRateLimit, analyzeLimiter, BATCH_LIMITS } from '@/app/lib/rate-limiter'
-import { analyzeCV, isWithinTokenLimit } from '@/app/lib/openai'
+import { analyzeCVWithPerplexity, isWithinTokenLimit } from '@/app/lib/perplexity-analyzer'
 import { AnalysisRequest, AnalysisResult, CandidateScore } from '@/app/lib/types'
 
 export async function POST(request: NextRequest) {
@@ -66,8 +66,8 @@ export async function POST(request: NextRequest) {
           continue
         }
 
-        // Analyze CV using OpenAI
-        const analysis = await analyzeCV({
+        // Analyze CV using Perplexity
+        const analysis = await analyzeCVWithPerplexity({
           jobProfile: jobProfileText,
           cvContent,
           candidateName: `Candidate ${cvId}`,

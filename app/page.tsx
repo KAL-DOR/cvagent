@@ -29,8 +29,37 @@ export default function Home() {
     setIsAnalyzing(false)
   }
 
-  const handleStartAnalysis = () => {
+  const handleStartAnalysis = async () => {
+    if (!jobProfile || uploadedFiles.length === 0) return
+    
     setIsAnalyzing(true)
+    
+    try {
+      const response = await fetch('/api/analyze', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jobProfile,
+          cvIds: uploadedFiles.map(file => file.id),
+        }),
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        handleAnalysisComplete(result.data)
+      } else {
+        console.error('Analysis failed:', result.error)
+        // Reset analyzing state on error
+        setIsAnalyzing(false)
+      }
+    } catch (error) {
+      console.error('Analysis error:', error)
+      // Reset analyzing state on error
+      setIsAnalyzing(false)
+    }
   }
 
   const canStartAnalysis = jobProfile && uploadedFiles.length > 0
