@@ -52,8 +52,21 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Job parsing error:', error)
+    
+    // Provide more specific error messages
+    let errorMessage = 'Failed to parse job description. Please try again.'
+    if (error instanceof Error) {
+      if (error.message.includes('API key')) {
+        errorMessage = 'OpenAI API key not configured. Please check your environment variables.'
+      } else if (error.message.includes('rate limit')) {
+        errorMessage = 'Rate limit exceeded. Please try again later.'
+      } else {
+        errorMessage = error.message
+      }
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to parse job description. Please try again.' },
+      { error: errorMessage },
       { status: 500 }
     )
   }

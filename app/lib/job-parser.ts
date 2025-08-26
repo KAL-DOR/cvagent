@@ -23,8 +23,11 @@ export async function parseJobDescription(jobText: string, language: 'en' | 'es'
   try {
     // Check if API key is properly configured
     if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy-key-for-build') {
-      throw new Error('OpenAI API key not configured')
+      throw new Error(language === 'es' ? 'Clave de API de OpenAI no configurada' : 'OpenAI API key not configured')
     }
+
+    console.log('Parsing job description with language:', language)
+    console.log('Job text length:', jobText.length)
 
     const systemPrompt = language === 'es' ? 
       `Eres un experto en recursos humanos y análisis de descripciones de trabajo. Tu tarea es extraer información estructurada de una descripción de trabajo y organizarla en campos específicos.
@@ -91,6 +94,7 @@ ${jobText}
 
 Please analyze this job description and extract the structured information in the specified JSON format.`
 
+    console.log('Making OpenAI API call...')
     const response = await openai.chat.completions.create({
       model: 'gpt-4',
       messages: [
@@ -102,12 +106,21 @@ Please analyze this job description and extract the structured information in th
       response_format: { type: 'json_object' },
     })
 
+    console.log('OpenAI response received')
     const content = response.choices[0]?.message?.content
     if (!content) {
       throw new Error('No response content from OpenAI')
     }
 
-    const parsedData = JSON.parse(content) as ParsedJobData
+    console.log('Parsing JSON response...')
+    let parsedData: ParsedJobData
+    try {
+      parsedData = JSON.parse(content) as ParsedJobData
+    } catch (parseError) {
+      console.error('JSON parse error:', parseError)
+      console.error('Raw content:', content)
+      throw new Error('Invalid JSON response from OpenAI')
+    }
     
     // Validate and clean the data
     return {

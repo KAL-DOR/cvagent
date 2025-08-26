@@ -65,6 +65,17 @@ export function JobDescriptionParser({ onJobParsed, isDisabled }: JobDescription
 
     setIsParsing(true)
     try {
+      // First check if API key is configured
+      const envResponse = await fetch('/api/test-env')
+      const envData = await envResponse.json()
+      
+      if (!envData.hasOpenAIKey) {
+        throw new Error(language === 'es' ? 
+          'Clave de API de OpenAI no configurada. Por favor, configura OPENAI_API_KEY en tu archivo .env.local' : 
+          'OpenAI API key not configured. Please set OPENAI_API_KEY in your .env.local file'
+        )
+      }
+
       const response = await fetch('/api/parse-job', {
         method: 'POST',
         headers: {
