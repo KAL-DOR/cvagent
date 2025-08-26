@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Upload, X, FileText, AlertCircle } from 'lucide-react'
 import { CVData } from '../lib/types'
-import { formatFileSize, getFileTypeIcon } from '../lib/utils'
+import { formatFileSize, getFileTypeIcon, formatDate } from '../lib/utils'
 import { validateFileType, validateFileSize } from '../lib/utils'
 import { useLanguage } from '../lib/language-context'
 import { t } from '../lib/i18n'
@@ -178,7 +178,7 @@ export function FileUpload({ onFilesUploaded, isDisabled }: FileUploadProps) {
                   <div>
                     <p className="font-medium text-gray-900">{file.filename}</p>
                     <p className="text-sm text-gray-500">
-                      {formatFileSize(file.fileSize)} • {file.uploadDate.toLocaleDateString()}
+                      {formatFileSize(file.fileSize)} • {formatDate(file.uploadDate)}
                     </p>
                   </div>
                 </div>

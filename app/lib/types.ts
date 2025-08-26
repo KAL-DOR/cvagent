@@ -15,7 +15,7 @@ export interface CVData {
   content: string
   extractedText: string
   fileSize: number
-  uploadDate: Date
+  uploadDate: Date | string
 }
 
 export interface SkillMatch {
