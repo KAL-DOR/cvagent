@@ -30,11 +30,19 @@ export default function Home() {
   }
 
   const handleStartAnalysis = async () => {
-    if (!jobProfile || uploadedFiles.length === 0) return
+    console.log(`🚀 Starting analysis...`)
+    console.log(`📋 Job Profile:`, jobProfile)
+    console.log(`📁 Uploaded Files:`, uploadedFiles)
+    
+    if (!jobProfile || uploadedFiles.length === 0) {
+      console.log(`❌ Missing job profile or files`)
+      return
+    }
     
     setIsAnalyzing(true)
     
     try {
+      console.log(`📡 Making API call to /api/analyze...`)
       const response = await fetch('/api/analyze', {
         method: 'POST',
         headers: {
@@ -46,7 +54,11 @@ export default function Home() {
         }),
       })
 
+      console.log(`📡 Response status: ${response.status}`)
+      console.log(`📡 Response ok: ${response.ok}`)
+
       const result = await response.json()
+      console.log(`📄 API Response:`, result)
 
       if (result.success && result.data) {
         handleAnalysisComplete(result.data)
