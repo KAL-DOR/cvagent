@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkRateLimit, analyzeLimiter } from '@/app/lib/rate-limiter'
-import { parseJobDescription } from '@/app/lib/job-parser'
+import { saveJobDescription } from '@/app/lib/job-parser'
 
 export async function POST(request: NextRequest) {
   try {
@@ -44,10 +44,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.log('Calling parseJobDescription...')
-    // Parse the job description
-    const parsedData = await parseJobDescription(jobText, language)
-    console.log('parseJobDescription completed successfully')
+    console.log('Saving job description...')
+    // Save the job description
+    const parsedData = saveJobDescription(jobText)
+    console.log('Job description saved successfully')
 
     return NextResponse.json({
       success: true,

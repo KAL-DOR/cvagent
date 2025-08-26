@@ -247,13 +247,13 @@ export const translations: Record<Language, Translations> = {
     jobProfile: {
       title: 'Job Profile',
       parseJob: {
-        title: 'AI Job Description Parser',
-        description: 'Paste a job description and let AI automatically extract all the details',
+        title: 'Job Description Input',
+        description: 'Paste a job description to save for CV comparison',
         placeholder: 'Paste your job description here...',
-        parseButton: 'Parse with AI',
-        parsing: 'Analyzing job description...',
-        success: 'Job description parsed successfully!',
-        error: 'Failed to parse job description',
+        parseButton: 'Save Job Description',
+        parsing: 'Saving job description...',
+        success: 'Job description saved successfully!',
+        error: 'Failed to save job description',
         example: 'Example Job Description'
       },
       basicInfo: {
@@ -449,13 +449,13 @@ export const translations: Record<Language, Translations> = {
     jobProfile: {
       title: 'Perfil del Puesto',
       parseJob: {
-        title: 'Analizador de Descripción de Trabajo con IA',
-        description: 'Pega una descripción de trabajo y deja que la IA extraiga automáticamente todos los detalles',
+        title: 'Entrada de Descripción de Trabajo',
+        description: 'Pega una descripción de trabajo para guardar y comparar con CVs',
         placeholder: 'Pega tu descripción de trabajo aquí...',
-        parseButton: 'Analizar con IA',
-        parsing: 'Analizando descripción de trabajo...',
-        success: '¡Descripción de trabajo analizada exitosamente!',
-        error: 'Error al analizar la descripción de trabajo',
+        parseButton: 'Guardar Descripción',
+        parsing: 'Guardando descripción de trabajo...',
+        success: '¡Descripción de trabajo guardada exitosamente!',
+        error: 'Error al guardar la descripción de trabajo',
         example: 'Ejemplo de Descripción de Trabajo'
       },
       basicInfo: {
