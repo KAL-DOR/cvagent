@@ -11,8 +11,12 @@ export const metadata: Metadata = {
   description: 'Intelligent CV screening with confidence scoring powered by AI',
   keywords: 'CV screening, AI, recruitment, hiring, candidate evaluation',
   authors: [{ name: 'CV Agent Team' }],
-  viewport: 'width=device-width, initial-scale=1',
   robots: 'index, follow',
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
 }
 
 export default function RootLayout({

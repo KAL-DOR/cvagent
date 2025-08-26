@@ -77,3 +77,18 @@ export function getScoreBgColor(score: number): string {
   if (score >= 40) return 'bg-orange-100'
   return 'bg-red-100'
 }
+
+export function getFileTypeIcon(filename: string): string {
+  const extension = filename.toLowerCase().substring(filename.lastIndexOf('.'))
+  switch (extension) {
+    case '.pdf':
+      return '📄'
+    case '.docx':
+    case '.doc':
+      return '📝'
+    case '.txt':
+      return '📃'
+    default:
+      return '📎'
+  }
+}

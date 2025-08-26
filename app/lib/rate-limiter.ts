@@ -2,19 +2,16 @@ import { RateLimiterMemory } from 'rate-limiter-flexible'
 
 // Rate limiters for different endpoints
 const uploadLimiter = new RateLimiterMemory({
-  keyGenerator: (req) => req.ip || 'anonymous',
   points: 5, // Number of requests
   duration: 60, // Per 60 seconds
 })
 
 const analyzeLimiter = new RateLimiterMemory({
-  keyGenerator: (req) => req.ip || 'anonymous',
   points: 3, // Number of requests
   duration: 300, // Per 5 minutes
 })
 
 const generalLimiter = new RateLimiterMemory({
-  keyGenerator: (req) => req.ip || 'anonymous',
   points: 100, // Number of requests
   duration: 60, // Per 60 seconds
 })

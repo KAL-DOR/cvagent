@@ -2,7 +2,7 @@ import OpenAI from 'openai'
 import { COST_LIMITS } from './rate-limiter'
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY || 'dummy-key-for-build',
 })
 
 export interface AnalysisPrompt {
@@ -13,6 +13,11 @@ export interface AnalysisPrompt {
 
 export async function analyzeCV(prompt: AnalysisPrompt): Promise<any> {
   try {
+    // Check if API key is properly configured
+    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy-key-for-build') {
+      throw new Error('OpenAI API key not configured')
+    }
+
     const systemPrompt = `You are an expert HR recruiter and CV analyst. Your task is to evaluate a candidate's CV against a specific job profile and provide a detailed analysis with confidence scores.
 
 Analysis Guidelines:
