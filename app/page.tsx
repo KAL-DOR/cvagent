@@ -48,12 +48,14 @@ export default function Home() {
 
       const result = await response.json()
 
-      if (result.success) {
+      if (result.success && result.data) {
         handleAnalysisComplete(result.data)
       } else {
-        console.error('Analysis failed:', result.error)
+        console.error('Analysis failed:', result.error || 'Unknown error')
         // Reset analyzing state on error
         setIsAnalyzing(false)
+        // Show user-friendly error
+        alert('Analysis failed. Please try again.')
       }
     } catch (error) {
       console.error('Analysis error:', error)
