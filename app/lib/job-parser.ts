@@ -1,9 +1,8 @@
-import OpenAI from 'openai'
+import { generateText } from 'ai'
+import { perplexity } from '@ai-sdk/perplexity'
 import { JobProfile } from './types'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || 'dummy-key-for-build',
-})
+const perplexityModel = perplexity('sonar-medium-online')
 
 export interface ParsedJobData {
   title: string
@@ -22,8 +21,8 @@ export interface ParsedJobData {
 export async function parseJobDescription(jobText: string, language: 'en' | 'es' = 'es'): Promise<ParsedJobData> {
   try {
     // Check if API key is properly configured
-    if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'dummy-key-for-build') {
-      throw new Error(language === 'es' ? 'Clave de API de OpenAI no configurada' : 'OpenAI API key not configured')
+    if (!process.env.PERPLEXITY_API_KEY || process.env.PERPLEXITY_API_KEY === 'dummy-key-for-build') {
+      throw new Error(language === 'es' ? 'Clave de API de Perplexity no configurada' : 'Perplexity API key not configured')
     }
 
     console.log('Parsing job description with language:', language)
@@ -94,22 +93,19 @@ ${jobText}
 
 Please analyze this job description and extract the structured information in the specified JSON format.`
 
-    console.log('Making OpenAI API call...')
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4',
+    console.log('Making Perplexity API call...')
+    const { text: content } = await generateText({
+      model: perplexityModel,
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user', content: userPrompt }
       ],
-      max_tokens: 2000,
       temperature: 0.3,
-      response_format: { type: 'json_object' },
     })
 
-    console.log('OpenAI response received')
-    const content = response.choices[0]?.message?.content
+    console.log('Perplexity response received')
     if (!content) {
-      throw new Error('No response content from OpenAI')
+      throw new Error('No response content from Perplexity')
     }
 
     console.log('Parsing JSON response...')
@@ -139,6 +135,12 @@ Please analyze this job description and extract the structured information in th
 
   } catch (error) {
     console.error('Job parsing error:', error)
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      language,
+      jobTextLength: jobText.length
+    })
     throw new Error(language === 'es' ? 'Error al analizar la descripción del trabajo' : 'Error analyzing job description')
   }
 }

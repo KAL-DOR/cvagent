@@ -69,10 +69,10 @@ export function JobDescriptionParser({ onJobParsed, isDisabled }: JobDescription
       const envResponse = await fetch('/api/test-env')
       const envData = await envResponse.json()
       
-      if (!envData.hasOpenAIKey) {
+      if (!envData.hasPerplexityKey) {
         throw new Error(language === 'es' ? 
-          'Clave de API de OpenAI no configurada. Por favor, configura OPENAI_API_KEY en tu archivo .env.local' : 
-          'OpenAI API key not configured. Please set OPENAI_API_KEY in your .env.local file'
+          'Clave de API de Perplexity no configurada. Por favor, configura PERPLEXITY_API_KEY en tu archivo .env.local' : 
+          'Perplexity API key not configured. Please set PERPLEXITY_API_KEY in your .env.local file'
         )
       }
 

@@ -4,10 +4,14 @@ import { parseJobDescription } from '@/app/lib/job-parser'
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('Parse job API called')
+    
     // Check rate limit
     const rateLimitResult = await checkRateLimit(analyzeLimiter, request.ip || 'anonymous')
+    console.log('Rate limit check result:', rateLimitResult)
     
     if (!rateLimitResult.success) {
+      console.log('Rate limit exceeded')
       return NextResponse.json(
         { error: 'Rate limit exceeded. Please try again later.' },
         { 
@@ -22,8 +26,10 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
     const { jobText, language = 'es' } = body
+    console.log('Request body:', { jobTextLength: jobText?.length, language })
 
     if (!jobText || typeof jobText !== 'string') {
+      console.log('Invalid job text')
       return NextResponse.json(
         { error: 'Job description text is required' },
         { status: 400 }
@@ -31,14 +37,17 @@ export async function POST(request: NextRequest) {
     }
 
     if (jobText.length > 10000) {
+      console.log('Job text too long')
       return NextResponse.json(
         { error: 'Job description is too long (max 10,000 characters)' },
         { status: 400 }
       )
     }
 
+    console.log('Calling parseJobDescription...')
     // Parse the job description
     const parsedData = await parseJobDescription(jobText, language)
+    console.log('parseJobDescription completed successfully')
 
     return NextResponse.json({
       success: true,
