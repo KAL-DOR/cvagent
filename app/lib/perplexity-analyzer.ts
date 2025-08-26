@@ -1,7 +1,7 @@
 import { generateText } from 'ai'
 import { perplexity } from '@ai-sdk/perplexity'
 
-const perplexityModel = perplexity('sonar-medium-online')
+const perplexityModel = perplexity('sonar-medium')
 
 export interface AnalysisPrompt {
   jobProfile: string
