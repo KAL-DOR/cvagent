@@ -34,6 +34,16 @@ export interface Translations {
   // Job Profile Form
   jobProfile: {
     title: string
+    parseJob: {
+      title: string
+      description: string
+      placeholder: string
+      parseButton: string
+      parsing: string
+      success: string
+      error: string
+      example: string
+    }
     basicInfo: {
       jobTitle: string
       jobTitlePlaceholder: string
@@ -186,6 +196,8 @@ export interface Translations {
     analyze: string
     analysis: string
     start: string
+    copied: string
+    use: string
   }
   
   // Errors
@@ -199,6 +211,8 @@ export interface Translations {
     rateLimitExceeded: string
     networkError: string
     unknownError: string
+    noJobDescription: string
+    parsingFailed: string
   }
 }
 
@@ -232,6 +246,16 @@ export const translations: Record<Language, Translations> = {
     },
     jobProfile: {
       title: 'Job Profile',
+      parseJob: {
+        title: 'AI Job Description Parser',
+        description: 'Paste a job description and let AI automatically extract all the details',
+        placeholder: 'Paste your job description here...',
+        parseButton: 'Parse with AI',
+        parsing: 'Analyzing job description...',
+        success: 'Job description parsed successfully!',
+        error: 'Failed to parse job description',
+        example: 'Example Job Description'
+      },
       basicInfo: {
         jobTitle: 'Job Title *',
         jobTitlePlaceholder: 'e.g., Senior Software Engineer',
@@ -377,7 +401,9 @@ export const translations: Record<Language, Translations> = {
       to: 'to',
       analyze: 'Analyze',
       analysis: 'Analysis',
-      start: 'Start'
+      start: 'Start',
+      copied: 'Copied',
+      use: 'Use'
     },
     errors: {
       uploadFailed: 'Upload failed. Please try again.',
@@ -388,7 +414,9 @@ export const translations: Record<Language, Translations> = {
       apiKeyMissing: 'OpenAI API key not configured',
       rateLimitExceeded: 'Rate limit exceeded. Please try again later.',
       networkError: 'Network error. Please check your connection.',
-      unknownError: 'An unknown error occurred.'
+      unknownError: 'An unknown error occurred.',
+      noJobDescription: 'Please enter a job description to parse.',
+      parsingFailed: 'Failed to parse job description. Please try again.'
     }
   },
   es: {
@@ -420,6 +448,16 @@ export const translations: Record<Language, Translations> = {
     },
     jobProfile: {
       title: 'Perfil del Puesto',
+      parseJob: {
+        title: 'Analizador de Descripción de Trabajo con IA',
+        description: 'Pega una descripción de trabajo y deja que la IA extraiga automáticamente todos los detalles',
+        placeholder: 'Pega tu descripción de trabajo aquí...',
+        parseButton: 'Analizar con IA',
+        parsing: 'Analizando descripción de trabajo...',
+        success: '¡Descripción de trabajo analizada exitosamente!',
+        error: 'Error al analizar la descripción de trabajo',
+        example: 'Ejemplo de Descripción de Trabajo'
+      },
       basicInfo: {
         jobTitle: 'Título del Puesto *',
         jobTitlePlaceholder: 'ej., Ingeniero de Software Senior',
@@ -565,7 +603,9 @@ export const translations: Record<Language, Translations> = {
       to: 'para',
       analyze: 'Analizar',
       analysis: 'Análisis',
-      start: 'Comenzar'
+      start: 'Comenzar',
+      copied: 'Copiado',
+      use: 'Usar'
     },
     errors: {
       uploadFailed: 'La carga falló. Por favor, inténtalo de nuevo.',
@@ -576,7 +616,9 @@ export const translations: Record<Language, Translations> = {
       apiKeyMissing: 'Clave API de OpenAI no configurada',
       rateLimitExceeded: 'Límite de tasa excedido. Por favor, inténtalo más tarde.',
       networkError: 'Error de red. Por favor, verifica tu conexión.',
-      unknownError: 'Ocurrió un error desconocido.'
+      unknownError: 'Ocurrió un error desconocido.',
+      noJobDescription: 'Por favor, ingresa una descripción de trabajo para analizar.',
+      parsingFailed: 'Error al analizar la descripción de trabajo. Por favor, inténtalo de nuevo.'
     }
   }
 }

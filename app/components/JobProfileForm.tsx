@@ -5,6 +5,7 @@ import { JobProfile } from '../lib/types'
 import { cn } from '../lib/utils'
 import { useLanguage } from '../lib/language-context'
 import { t } from '../lib/i18n'
+import { JobDescriptionParser } from './JobDescriptionParser'
 
 interface JobProfileFormProps {
   onSubmit: (profile: JobProfile) => void
@@ -76,9 +77,19 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
     }
   }
 
+  const handleJobParsed = (parsedJob: JobProfile) => {
+    setFormData(parsedJob)
+  }
+
   return (
     <div className="card">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">{t(language, 'jobProfile.title')}</h2>
+      
+      {/* AI Job Description Parser */}
+      <JobDescriptionParser 
+        onJobParsed={handleJobParsed}
+        isDisabled={isDisabled}
+      />
       
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
