@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { JobProfile } from '../lib/types'
 import { cn } from '../lib/utils'
+import { useLanguage } from '../lib/language-context'
+import { t } from '../lib/i18n'
 
 interface JobProfileFormProps {
   onSubmit: (profile: JobProfile) => void
@@ -10,6 +12,7 @@ interface JobProfileFormProps {
 }
 
 export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
+  const { language } = useLanguage()
   const [formData, setFormData] = useState<Partial<JobProfile>>({
     title: '',
     description: '',
@@ -75,21 +78,21 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
 
   return (
     <div className="card">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Job Profile</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">{t(language, 'jobProfile.title')}</h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Basic Information */}
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Job Title *
+              {t(language, 'jobProfile.basicInfo.jobTitle')}
             </label>
             <input
               type="text"
               value={formData.title || ''}
               onChange={(e) => handleInputChange('title', e.target.value)}
               className="input-field"
-              placeholder="e.g., Senior Software Engineer"
+              placeholder={t(language, 'jobProfile.basicInfo.jobTitlePlaceholder')}
               required
               disabled={isDisabled}
             />
@@ -97,13 +100,13 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Job Description *
+              {t(language, 'jobProfile.basicInfo.description')}
             </label>
             <textarea
               value={formData.description || ''}
               onChange={(e) => handleInputChange('description', e.target.value)}
               className="input-field min-h-[100px]"
-              placeholder="Describe the role, responsibilities, and requirements..."
+              placeholder={t(language, 'jobProfile.basicInfo.descriptionPlaceholder')}
               required
               disabled={isDisabled}
             />
@@ -112,28 +115,28 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Industry
+                {t(language, 'jobProfile.basicInfo.industry')}
               </label>
               <input
                 type="text"
                 value={formData.industry || ''}
                 onChange={(e) => handleInputChange('industry', e.target.value)}
                 className="input-field"
-                placeholder="e.g., Technology, Healthcare"
+                placeholder={t(language, 'jobProfile.basicInfo.industryPlaceholder')}
                 disabled={isDisabled}
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Location
+                {t(language, 'jobProfile.basicInfo.location')}
               </label>
               <input
                 type="text"
                 value={formData.location || ''}
                 onChange={(e) => handleInputChange('location', e.target.value)}
                 className="input-field"
-                placeholder="e.g., New York, NY"
+                placeholder={t(language, 'jobProfile.basicInfo.locationPlaceholder')}
                 disabled={isDisabled}
               />
             </div>
@@ -141,7 +144,7 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Experience Level
+              {t(language, 'jobProfile.basicInfo.experienceLevel')}
             </label>
             <select
               value={formData.experienceLevel || 'mid'}
@@ -149,10 +152,10 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
               className="input-field"
               disabled={isDisabled}
             >
-              <option value="entry">Entry Level</option>
-              <option value="mid">Mid Level</option>
-              <option value="senior">Senior Level</option>
-              <option value="lead">Lead/Management</option>
+              <option value="entry">{t(language, 'jobProfile.basicInfo.experienceLevels.entry')}</option>
+              <option value="mid">{t(language, 'jobProfile.basicInfo.experienceLevels.mid')}</option>
+              <option value="senior">{t(language, 'jobProfile.basicInfo.experienceLevels.senior')}</option>
+              <option value="lead">{t(language, 'jobProfile.basicInfo.experienceLevels.lead')}</option>
             </select>
           </div>
         </div>
@@ -160,7 +163,7 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
         {/* Required Skills */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Required Skills
+            {t(language, 'jobProfile.skills.requiredSkills')}
           </label>
           <div className="flex space-x-2 mb-3">
             <input
@@ -168,7 +171,7 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
               value={skillInput}
               onChange={(e) => setSkillInput(e.target.value)}
               className="input-field flex-1"
-              placeholder="e.g., JavaScript, React"
+              placeholder={t(language, 'jobProfile.skills.skillPlaceholder')}
               disabled={isDisabled}
               onKeyPress={(e) => {
                 if (e.key === 'Enter') {
@@ -183,7 +186,7 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
               disabled={isDisabled}
               className="btn-primary px-4"
             >
-              Add
+              {t(language, 'jobProfile.skills.add')}
             </button>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -209,7 +212,7 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
         {/* Preferred Skills */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Preferred Skills
+            {t(language, 'jobProfile.skills.preferredSkills')}
           </label>
           <div className="flex space-x-2 mb-3">
             <input
@@ -217,7 +220,7 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
               value={skillInput}
               onChange={(e) => setSkillInput(e.target.value)}
               className="input-field flex-1"
-              placeholder="e.g., TypeScript, AWS"
+              placeholder={t(language, 'jobProfile.skills.skillPlaceholder')}
               disabled={isDisabled}
               onKeyPress={(e) => {
                 if (e.key === 'Enter') {
@@ -232,7 +235,7 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
               disabled={isDisabled}
               className="btn-primary px-4"
             >
-              Add
+              {t(language, 'jobProfile.skills.add')}
             </button>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -258,7 +261,7 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
         {/* Education Requirements */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Education Requirements
+            {t(language, 'jobProfile.education.title')}
           </label>
           <div className="flex space-x-2 mb-3">
             <input
@@ -266,7 +269,7 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
               value={educationInput}
               onChange={(e) => setEducationInput(e.target.value)}
               className="input-field flex-1"
-              placeholder="e.g., Bachelor's in Computer Science"
+              placeholder={t(language, 'jobProfile.education.placeholder')}
               disabled={isDisabled}
               onKeyPress={(e) => {
                 if (e.key === 'Enter') {
@@ -281,7 +284,7 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
               disabled={isDisabled}
               className="btn-primary px-4"
             >
-              Add
+              {t(language, 'jobProfile.education.add')}
             </button>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -312,7 +315,7 @@ export function JobProfileForm({ onSubmit, isDisabled }: JobProfileFormProps) {
             (!formData.title || !formData.description) && "opacity-50 cursor-not-allowed"
           )}
         >
-          Save Job Profile
+          {t(language, 'jobProfile.submit')}
         </button>
       </form>
     </div>

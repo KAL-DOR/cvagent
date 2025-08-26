@@ -6,8 +6,11 @@ import { JobProfileForm } from './components/JobProfileForm'
 import { FileUpload } from './components/FileUpload'
 import { AnalysisResults } from './components/AnalysisResults'
 import { JobProfile, CVData, AnalysisResult } from './lib/types'
+import { useLanguage } from './lib/language-context'
+import { t } from './lib/i18n'
 
 export default function Home() {
+  const { language } = useLanguage()
   const [jobProfile, setJobProfile] = useState<JobProfile | null>(null)
   const [uploadedFiles, setUploadedFiles] = useState<CVData[]>([])
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
@@ -41,10 +44,10 @@ export default function Home() {
           {/* Hero Section */}
           <div className="text-center space-y-4">
             <h1 className="text-4xl md:text-6xl font-bold text-gradient">
-              CV Agent
+              {t(language, 'main.hero.title')}
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              AI-powered CV screening with confidence scoring. Upload job profiles and CVs to get intelligent candidate rankings.
+              {t(language, 'main.hero.subtitle')}
             </p>
           </div>
 
@@ -68,18 +71,18 @@ export default function Home() {
               {canStartAnalysis && (
                 <div className="card">
                   <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                    Ready to Analyze
+                    {t(language, 'common.ready')} {t(language, 'common.to')} {t(language, 'common.analyze')}
                   </h3>
                   <div className="space-y-2 text-sm text-gray-600">
-                    <p>• Job Profile: {jobProfile?.title}</p>
-                    <p>• CVs Uploaded: {uploadedFiles.length}</p>
+                    <p>• {t(language, 'jobProfile.title')}: {jobProfile?.title}</p>
+                    <p>• {t(language, 'fileUpload.uploadedFiles')}: {uploadedFiles.length}</p>
                   </div>
                   <button
                     onClick={handleStartAnalysis}
                     disabled={isAnalyzing}
                     className="btn-primary w-full mt-4 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isAnalyzing ? 'Analyzing...' : 'Start Analysis'}
+                    {isAnalyzing ? t(language, 'common.processing') : t(language, 'common.start') + ' ' + t(language, 'common.analysis')}
                   </button>
                 </div>
               )}
@@ -96,28 +99,28 @@ export default function Home() {
           {/* Features Section */}
           <div className="mt-16">
             <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-              Why Choose CV Agent?
+              {t(language, 'main.features.title')}
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               <div className="card text-center">
                 <div className="text-4xl mb-4">🤖</div>
-                <h3 className="text-xl font-semibold mb-2">AI-Powered Analysis</h3>
+                <h3 className="text-xl font-semibold mb-2">{t(language, 'main.features.aiAnalysis.title')}</h3>
                 <p className="text-gray-600">
-                  Advanced machine learning algorithms provide accurate candidate assessments with detailed reasoning.
+                  {t(language, 'main.features.aiAnalysis.description')}
                 </p>
               </div>
               <div className="card text-center">
                 <div className="text-4xl mb-4">📊</div>
-                <h3 className="text-xl font-semibold mb-2">Confidence Scoring</h3>
+                <h3 className="text-xl font-semibold mb-2">{t(language, 'main.features.confidenceScoring.title')}</h3>
                 <p className="text-gray-600">
-                  Get precise confidence scores for each candidate with breakdowns of skills, experience, and education matches.
+                  {t(language, 'main.features.confidenceScoring.description')}
                 </p>
               </div>
               <div className="card text-center">
                 <div className="text-4xl mb-4">⚡</div>
-                <h3 className="text-xl font-semibold mb-2">Fast & Efficient</h3>
+                <h3 className="text-xl font-semibold mb-2">{t(language, 'main.features.fastEfficient.title')}</h3>
                 <p className="text-gray-600">
-                  Process multiple CVs simultaneously with our optimized pipeline and get results in minutes.
+                  {t(language, 'main.features.fastEfficient.description')}
                 </p>
               </div>
             </div>

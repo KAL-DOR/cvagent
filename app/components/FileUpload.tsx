@@ -6,6 +6,8 @@ import { Upload, X, FileText, AlertCircle } from 'lucide-react'
 import { CVData } from '../lib/types'
 import { formatFileSize, getFileTypeIcon } from '../lib/utils'
 import { validateFileType, validateFileSize } from '../lib/utils'
+import { useLanguage } from '../lib/language-context'
+import { t } from '../lib/i18n'
 
 interface FileUploadProps {
   onFilesUploaded: (files: CVData[]) => void
@@ -13,6 +15,7 @@ interface FileUploadProps {
 }
 
 export function FileUpload({ onFilesUploaded, isDisabled }: FileUploadProps) {
+  const { language } = useLanguage()
   const [uploadedFiles, setUploadedFiles] = useState<CVData[]>([])
   const [isUploading, setIsUploading] = useState(false)
   const [errors, setErrors] = useState<string[]>([])
@@ -104,7 +107,7 @@ export function FileUpload({ onFilesUploaded, isDisabled }: FileUploadProps) {
 
   return (
     <div className="card">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">Upload CVs</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-6">{t(language, 'fileUpload.title')}</h2>
       
       {/* Dropzone */}
       <div
@@ -121,13 +124,13 @@ export function FileUpload({ onFilesUploaded, isDisabled }: FileUploadProps) {
         <input {...getInputProps()} />
         <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
         <p className="text-lg font-medium text-gray-900 mb-2">
-          {isDragActive ? 'Drop files here' : 'Drag & drop CVs here'}
+          {isDragActive ? t(language, 'fileUpload.dragDrop') : t(language, 'fileUpload.dragDrop')}
         </p>
         <p className="text-gray-600 mb-4">
-          or click to select files
+          {t(language, 'fileUpload.clickToSelect')}
         </p>
         <p className="text-sm text-gray-500">
-          Supports PDF, DOCX, DOC, TXT (max 10MB each, up to 10 files)
+          {t(language, 'fileUpload.fileTypes')}
         </p>
       </div>
 
@@ -136,7 +139,7 @@ export function FileUpload({ onFilesUploaded, isDisabled }: FileUploadProps) {
         <div className="mt-4 p-4 bg-blue-50 rounded-lg">
           <div className="flex items-center space-x-2">
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-600"></div>
-            <span className="text-sm text-blue-700">Uploading files...</span>
+            <span className="text-sm text-blue-700">{t(language, 'fileUpload.uploadProgress')}</span>
           </div>
         </div>
       )}
@@ -147,7 +150,7 @@ export function FileUpload({ onFilesUploaded, isDisabled }: FileUploadProps) {
           <div className="flex items-start space-x-2">
             <AlertCircle className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
             <div>
-              <h4 className="text-sm font-medium text-red-800 mb-1">Upload Errors</h4>
+              <h4 className="text-sm font-medium text-red-800 mb-1">{t(language, 'fileUpload.errors.title')}</h4>
               <ul className="text-sm text-red-700 space-y-1">
                 {errors.map((error, index) => (
                   <li key={index}>• {error}</li>
@@ -162,7 +165,7 @@ export function FileUpload({ onFilesUploaded, isDisabled }: FileUploadProps) {
       {uploadedFiles.length > 0 && (
         <div className="mt-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Uploaded Files ({uploadedFiles.length})
+            {t(language, 'fileUpload.uploadedFiles')} ({uploadedFiles.length})
           </h3>
           <div className="space-y-3">
             {uploadedFiles.map((file) => (
@@ -194,12 +197,12 @@ export function FileUpload({ onFilesUploaded, isDisabled }: FileUploadProps) {
 
       {/* Instructions */}
       <div className="mt-6 p-4 bg-primary-50 rounded-lg">
-        <h4 className="font-medium text-primary-900 mb-2">Tips for best results:</h4>
+        <h4 className="font-medium text-primary-900 mb-2">{t(language, 'fileUpload.tips.title')}</h4>
         <ul className="text-sm text-primary-800 space-y-1">
-          <li>• Ensure CVs are clear and well-formatted</li>
-          <li>• Include relevant skills and experience details</li>
-          <li>• Use standard file formats (PDF preferred)</li>
-          <li>• Keep file sizes under 10MB for faster processing</li>
+          <li>{t(language, 'fileUpload.tips.tip1')}</li>
+          <li>{t(language, 'fileUpload.tips.tip2')}</li>
+          <li>{t(language, 'fileUpload.tips.tip3')}</li>
+          <li>{t(language, 'fileUpload.tips.tip4')}</li>
         </ul>
       </div>
     </div>
