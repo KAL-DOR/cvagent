@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkRateLimit, analyzeLimiter, BATCH_LIMITS } from '@/app/lib/rate-limiter'
-import { analyzeCVWithPerplexity, isWithinTokenLimit } from '@/app/lib/perplexity-analyzer'
+import { isWithinTokenLimit } from '@/app/lib/perplexity-analyzer'
 import { AnalysisRequest, AnalysisResult, CandidateScore } from '@/app/lib/types'
 
 export async function POST(request: NextRequest) {
@@ -66,12 +66,35 @@ export async function POST(request: NextRequest) {
           continue
         }
 
-        // Analyze CV using Perplexity
-        const analysis = await analyzeCVWithPerplexity({
-          jobProfile: jobProfileText,
-          cvContent,
-          candidateName: `Candidate ${cvId}`,
+        // Simple Perplexity analysis
+        const response = await fetch('https://api.perplexity.ai/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${process.env.PERPLEXITY_API_KEY}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'sonar',
+            messages: [
+              {
+                role: 'system',
+                content: 'You are an HR expert. Analyze this CV against the job profile and return a JSON response with: overallScore (0-100), skillMatches (array), experienceScore (0-100), educationScore (0-100), reasoning (string), strengths (array), weaknesses (array), recommendations (array).'
+              },
+              {
+                role: 'user',
+                content: `Job Profile: ${jobProfileText}\n\nCV Content: ${cvContent}\n\nAnalyze this candidate.`
+              }
+            ],
+            temperature: 0.3,
+          }),
         })
+
+        if (!response.ok) {
+          throw new Error(`Perplexity API error: ${response.status}`)
+        }
+
+        const data = await response.json()
+        const analysis = JSON.parse(data.choices[0].message.content)
 
         candidates.push({
           id: cvId,
