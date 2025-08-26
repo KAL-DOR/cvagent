@@ -60,10 +60,12 @@ export default function Home() {
       const result = await response.json()
       console.log(`📄 API Response:`, result)
 
-      if (result.success && result.data) {
-        handleAnalysisComplete(result.data)
+      // The API returns the analysis result directly, not wrapped in success/data
+      if (result.candidates && result.candidates.length > 0) {
+        console.log(`✅ Analysis successful! Found ${result.candidates.length} candidates`)
+        handleAnalysisComplete(result)
       } else {
-        console.error('Analysis failed:', result.error || 'Unknown error')
+        console.error('Analysis failed: No candidates returned')
         // Reset analyzing state on error
         setIsAnalyzing(false)
         // Show user-friendly error
