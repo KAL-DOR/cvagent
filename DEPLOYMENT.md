@@ -1,6 +1,6 @@
 # CV Agent - Deployment Guide
 
-## 🚀 Deploying to Vercel
+## Deploying to Vercel
 
 ### Prerequisites
 
