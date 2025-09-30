@@ -91,56 +91,84 @@ export async function POST(request: NextRequest) {
         console.log(`📄 CV Content length: ${cvContent.length} characters`)
         console.log(`💼 Job Profile length: ${jobProfileText.length} characters`)
         
-        // REAL Perplexity API call with verbose logging
-        console.log(`🚀 Making Perplexity API call...`)
-        console.log(`🔑 API Key present: ${!!process.env.PERPLEXITY_API_KEY}`)
+        // REAL Anthropic API call with verbose logging
+        console.log(`🚀 Making Anthropic API call...`)
+        console.log(`🔑 API Key present: ${!!process.env.ANTHROPIC_API_KEY}`)
         
-        const response = await fetch('https://api.perplexity.ai/chat/completions', {
+        const apiKey = process.env.ANTHROPIC_API_KEY
+        if (!apiKey) {
+          throw new Error('Anthropic API key not configured')
+        }
+
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${process.env.PERPLEXITY_API_KEY}`,
             'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01'
           },
           body: JSON.stringify({
-            model: 'sonar',
-            messages: [
-              {
-                role: 'system',
-                content: 'You are an HR expert. Analyze this CV against the job profile and return ONLY a valid JSON response with: overallScore (0-100), skillMatches (array), experienceScore (0-100), educationScore (0-100), reasoning (string), strengths (array), weaknesses (array), recommendations (array).'
-              },
-              {
-                role: 'user',
-                content: `Job Profile: ${jobProfileText}\n\nCV Content: ${cvContent}\n\nAnalyze this candidate and return JSON.`
-              }
-            ],
-            temperature: 0.3,
+            model: 'claude-3-5-haiku-20241022',
+            max_tokens: 1000,
+            messages: [{
+              role: 'user',
+              content: `You are an expert HR recruiter and CV analyst. Analyze this CV against the job profile and return ONLY a valid JSON response.
+
+Job Profile:
+${jobProfileText}
+
+CV Content:
+${cvContent}
+
+Return JSON with these exact keys:
+{
+  "overallScore": number (0-100),
+  "skillMatches": [
+    {
+      "skill": string,
+      "confidence": number (0-100),
+      "found": boolean,
+      "context": string
+    }
+  ],
+  "experienceScore": number (0-100),
+  "educationScore": number (0-100),
+  "reasoning": string,
+  "strengths": [string],
+  "weaknesses": [string],
+  "recommendations": [string]
+}`
+            }]
           }),
         })
 
-        console.log(`📡 Perplexity response status: ${response.status}`)
-        console.log(`📡 Perplexity response ok: ${response.ok}`)
+        console.log(`📡 Anthropic response status: ${response.status}`)
+        console.log(`📡 Anthropic response ok: ${response.ok}`)
 
         if (!response.ok) {
           const errorText = await response.text()
-          console.error(`❌ Perplexity API error: ${response.status} - ${errorText}`)
-          throw new Error(`Perplexity API error: ${response.status} - ${errorText}`)
+          console.error(`❌ Anthropic API error: ${response.status} - ${errorText}`)
+          throw new Error(`Anthropic API error: ${response.status} - ${errorText}`)
         }
 
         const data = await response.json()
-        console.log(`✅ Perplexity response received:`, JSON.stringify(data, null, 2))
+        console.log(`✅ Anthropic response received:`, JSON.stringify(data, null, 2))
         
-        const analysisText = data.choices[0].message.content
+        const analysisText = data.content[0].text
         console.log(`📝 Raw analysis text: ${analysisText}`)
         
         let analysis
         try {
-          analysis = JSON.parse(analysisText)
+          // Extract JSON from the response (in case there's extra text)
+          const jsonMatch = analysisText.match(/\{[\s\S]*\}/);
+          const jsonString = jsonMatch ? jsonMatch[0] : analysisText;
+          analysis = JSON.parse(jsonString)
           console.log(`✅ Parsed analysis:`, JSON.stringify(analysis, null, 2))
         } catch (parseError) {
           console.error(`❌ JSON parse error: ${parseError}`)
           console.error(`❌ Raw text that failed to parse: ${analysisText}`)
           const errorMessage = parseError instanceof Error ? parseError.message : 'Unknown parse error'
-          throw new Error(`Failed to parse Perplexity response as JSON: ${errorMessage}`)
+          throw new Error(`Failed to parse Anthropic response as JSON: ${errorMessage}`)
         }
 
         candidates.push({
