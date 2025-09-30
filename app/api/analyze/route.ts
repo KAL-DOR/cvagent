@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { checkRateLimit, analyzeLimiter, BATCH_LIMITS } from '@/app/lib/rate-limiter'
 import { isWithinTokenLimit } from '@/app/lib/perplexity-analyzer'
-import { AnalysisRequest, AnalysisResult, CandidateScore } from '@/app/lib/types'
+import { AnalysisRequest, AnalysisResult, CandidateScore, JobProfile } from '@/app/lib/types'
 
 export async function POST(request: NextRequest) {
   console.log(`🚀 ANALYZE API CALLED`)
@@ -240,7 +240,7 @@ Return JSON with these exact keys:
   }
 }
 
-function formatJobProfile(jobProfile: any): string {
+function formatJobProfile(jobProfile: JobProfile): string {
   return `
 Job Title: ${jobProfile.title}
 Description: ${jobProfile.description}

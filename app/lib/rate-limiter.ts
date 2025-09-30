@@ -27,11 +27,12 @@ export async function checkRateLimit(
       remaining: result.remainingPoints,
       reset: result.msBeforeNext,
     }
-  } catch (result: any) {
+  } catch (result: unknown) {
+    const error = result as { remainingPoints: number; msBeforeNext: number }
     return {
       success: false,
-      remaining: result.remainingPoints,
-      reset: result.msBeforeNext,
+      remaining: error.remainingPoints,
+      reset: error.msBeforeNext,
     }
   }
 }

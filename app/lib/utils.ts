@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { SkillMatch } from './types'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -48,14 +49,14 @@ export function extractTextFromFilename(filename: string): string {
   return filename.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ')
 }
 
-export function calculateConfidenceScore(skillMatches: any[]): number {
+export function calculateConfidenceScore(skillMatches: SkillMatch[]): number {
   if (skillMatches.length === 0) return 0
   
   const totalConfidence = skillMatches.reduce((sum, match) => sum + match.confidence, 0)
   return Math.round((totalConfidence / skillMatches.length) * 100)
 }
 
-export function debounce<T extends (...args: any[]) => any>(
+export function debounce<T extends (...args: unknown[]) => unknown>(
   func: T,
   wait: number
 ): (...args: Parameters<T>) => void {
