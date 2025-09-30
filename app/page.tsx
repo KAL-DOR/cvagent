@@ -140,36 +140,6 @@ export default function Home() {
               )}
             </div>
           </div>
-
-          {/* Features Section */}
-          <div className="mt-16">
-            <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">
-              {t(language, 'main.features.title')}
-            </h2>
-            <div className="grid md:grid-cols-3 gap-8">
-              <div className="card text-center">
-                <div className="text-4xl mb-4">🤖</div>
-                <h3 className="text-xl font-semibold mb-2">{t(language, 'main.features.aiAnalysis.title')}</h3>
-                <p className="text-gray-600">
-                  {t(language, 'main.features.aiAnalysis.description')}
-                </p>
-              </div>
-              <div className="card text-center">
-                <div className="text-4xl mb-4">📊</div>
-                <h3 className="text-xl font-semibold mb-2">{t(language, 'main.features.confidenceScoring.title')}</h3>
-                <p className="text-gray-600">
-                  {t(language, 'main.features.confidenceScoring.description')}
-                </p>
-              </div>
-              <div className="card text-center">
-                <div className="text-4xl mb-4">⚡</div>
-                <h3 className="text-xl font-semibold mb-2">{t(language, 'main.features.fastEfficient.title')}</h3>
-                <p className="text-gray-600">
-                  {t(language, 'main.features.fastEfficient.description')}
-                </p>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
     </div>
