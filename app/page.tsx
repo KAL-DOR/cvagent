@@ -48,10 +48,11 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          jobProfile,
-          cvIds: uploadedFiles.map(file => file.id),
-        }),
+            body: JSON.stringify({
+              jobProfile,
+              cvIds: uploadedFiles.map(file => file.id),
+              cvData: uploadedFiles, // Send the actual CV data
+            }),
       })
 
       console.log(`📡 Response status: ${response.status}`)

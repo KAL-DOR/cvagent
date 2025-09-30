@@ -55,6 +55,7 @@ export interface UploadResponse {
 export interface AnalysisRequest {
   jobProfile: JobProfile
   cvIds: string[]
+  cvData?: CVData[] // Include the actual CV data for analysis
 }
 
 export interface RateLimitInfo {

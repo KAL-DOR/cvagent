@@ -39,16 +39,36 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // In a real application, you would fetch the CV data from your storage
-    // For now, we'll simulate the analysis with mock data
+    // Get the actual CV data from the request body
     const candidates: CandidateScore[] = []
     const jobProfileText = formatJobProfile(body.jobProfile)
 
     // Analyze each CV
     for (const cvId of body.cvIds) {
       try {
-        // Simulate CV content - in real app, fetch from storage
-        const cvContent = `Sample CV content for ${cvId}...`
+        // Get the actual CV content from the uploaded files
+        // We need to find the CV data that matches this ID
+        const cvData = body.cvData?.find(cv => cv.id === cvId)
+        if (!cvData) {
+          console.error(`❌ CV data not found for ID: ${cvId}`)
+          candidates.push({
+            id: cvId,
+            filename: `cv_${cvId}.pdf`,
+            overallScore: 0,
+            skillMatches: [],
+            experienceScore: 0,
+            educationScore: 0,
+            reasoning: 'CV data not found',
+            strengths: [],
+            weaknesses: ['CV data not available'],
+            recommendations: ['Please re-upload the CV'],
+          })
+          continue
+        }
+
+        const cvContent = cvData.extractedText
+        console.log(`📄 Found CV data for ${cvId}: ${cvData.filename}`)
+        console.log(`📄 CV Content preview: ${cvContent.substring(0, 200)}...`)
         
         // Check token limits
         if (!isWithinTokenLimit(jobProfileText + cvContent)) {
@@ -125,7 +145,7 @@ export async function POST(request: NextRequest) {
 
         candidates.push({
           id: cvId,
-          filename: `cv_${cvId}.pdf`,
+          filename: cvData.filename,
           overallScore: analysis.overallScore || 0,
           skillMatches: analysis.skillMatches || [],
           experienceScore: analysis.experienceScore || 0,
@@ -140,9 +160,10 @@ export async function POST(request: NextRequest) {
 
       } catch (error) {
         console.error(`Error analyzing CV ${cvId}:`, error)
+        const cvData = body.cvData?.find(cv => cv.id === cvId)
         candidates.push({
           id: cvId,
-          filename: `cv_${cvId}.pdf`,
+          filename: cvData?.filename || `cv_${cvId}.pdf`,
           overallScore: 0,
           skillMatches: [],
           experienceScore: 0,
